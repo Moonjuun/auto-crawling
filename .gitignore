@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.*
+# yarn berry (v2+) 설정 - 현재 yarn v1 classic 사용 중이므로 yarn.lock은 커밋
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -39,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# mcp
+mcp.json
