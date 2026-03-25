@@ -17,6 +17,7 @@ import { toggleCrawlJobActive, deleteCrawlJob } from '@/api/actions/crawl'
 import { cronToKorean } from '@/lib/cron-utils'
 import type { CrawlJob, CrawlSelector } from '@/types/crawl'
 import JobDialog from './JobDialog'
+import CrawlBeginnerGuide from './CrawlBeginnerGuide'
 import Link from 'next/link'
 
 interface CrawlPageClientProps {
@@ -123,22 +124,33 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
 
   return (
     <>
+      <div className="min-w-0">
       {/* ── 헤더 영역 ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div
+        id="crawl-header"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
+      >
         <div>
           <h1 className="text-2xl font-bold">크롤링 작업 관리</h1>
           <p className="text-sm text-muted-foreground mt-1">
             수집 작업을 등록하고 스케줄을 관리합니다.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/crawl/results">
-            <Button variant="outline" size="sm">
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Link href="/crawl/results" className="w-full sm:w-auto">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto min-h-10">
               수집 결과 보기
             </Button>
           </Link>
-          <Button onClick={() => setAddOpen(true)}>+ 새 작업 추가</Button>
+          <Button onClick={() => setAddOpen(true)} className="min-h-10">
+            + 새 작업 추가
+          </Button>
         </div>
+      </div>
+
+      {/* ── 초보자 가이드 ── */}
+      <div id="crawl-guide">
+        <CrawlBeginnerGuide />
       </div>
 
       {/* ── 작업 없을 때 빈 화면 ── */}
@@ -150,7 +162,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
       )}
 
       {/* ── 작업 카드 목록 ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div id="crawl-job-list" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {jobs.map((job) => (
           <Card key={job.id} className="flex flex-col">
             <CardHeader className="pb-3">
@@ -204,7 +216,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex-1 min-w-0"
+                  className="flex-1 min-w-0 min-h-10"
                   onClick={() => handleEditClick(job)}
                   disabled={isPending}
                 >
@@ -212,7 +224,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
                 </Button>
                 <Button
                   size="sm"
-                  className="flex-1 min-w-0"
+                  className="flex-1 min-w-0 min-h-10"
                   onClick={() => handleRunNow(job)}
                   disabled={isPending}
                 >
@@ -221,7 +233,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
                 <Button
                   size="sm"
                   variant="destructive"
-                  className="flex-1 min-w-0"
+                  className="flex-1 min-w-0 min-h-10"
                   onClick={() => {
                     setDeleteTarget(job)
                     setDeleteOpen(true)
@@ -234,6 +246,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
             </CardContent>
           </Card>
         ))}
+      </div>
       </div>
 
       {/* ── 작업 추가 다이얼로그 ── */}
@@ -257,7 +270,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
             <span className="font-semibold text-foreground">
-              "{deleteTarget?.name}"
+              &quot;{deleteTarget?.name}&quot;
             </span>{' '}
             작업을 삭제하면 관련된 수집 결과와 로그도 모두 삭제됩니다.
             <br />
