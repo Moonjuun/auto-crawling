@@ -124,27 +124,36 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
 
   return (
     <>
-      <div className="min-w-0">
+      <div className="min-w-0 space-y-6">
       {/* ── 헤더 영역 ── */}
       <div
         id="crawl-header"
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
+        className="rounded-3xl border border-border/60 bg-background/90 p-5 shadow-sm backdrop-blur sm:p-6"
       >
-        <div>
-          <h1 className="text-2xl font-bold">크롤링 작업 관리</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            수집 작업을 등록하고 스케줄을 관리합니다.
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Link href="/crawl/results" className="w-full sm:w-auto">
-            <Button variant="outline" size="sm" className="w-full sm:w-auto min-h-10">
-              수집 결과 보기
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+              Auto Crawling
+            </p>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">크롤링 작업 관리</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              수집 작업을 등록하고 스케줄을 관리합니다.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Link href="/crawl/results" className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-10 w-full rounded-xl border-border/70 bg-background px-4 sm:w-auto"
+              >
+                수집 결과 보기
+              </Button>
+            </Link>
+            <Button onClick={() => setAddOpen(true)} className="min-h-10 rounded-xl px-4">
+              + 새 작업 추가
             </Button>
-          </Link>
-          <Button onClick={() => setAddOpen(true)} className="min-h-10">
-            + 새 작업 추가
-          </Button>
+          </div>
         </div>
       </div>
 
@@ -155,19 +164,27 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
 
       {/* ── 작업 없을 때 빈 화면 ── */}
       {jobs.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed rounded-xl">
-          <p className="text-muted-foreground mb-4">등록된 크롤링 작업이 없습니다.</p>
-          <Button onClick={() => setAddOpen(true)}>첫 번째 작업 추가하기</Button>
+        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/70 bg-background py-20 text-center shadow-sm">
+          <p className="mb-2 text-base font-medium tracking-tight">등록된 크롤링 작업이 없습니다.</p>
+          <p className="mb-5 text-sm text-muted-foreground">
+            첫 작업만 추가하면 나머지는 같은 방식으로 빠르게 늘릴 수 있어요.
+          </p>
+          <Button onClick={() => setAddOpen(true)} className="rounded-xl px-5">
+            첫 번째 작업 추가하기
+          </Button>
         </div>
       )}
 
       {/* ── 작업 카드 목록 ── */}
-      <div id="crawl-job-list" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div id="crawl-job-list" className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {jobs.map((job) => (
-          <Card key={job.id} className="flex flex-col">
+          <Card
+            key={job.id}
+            className="flex flex-col rounded-3xl border border-border/70 bg-background shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+          >
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between gap-2">
-                <CardTitle className="text-base leading-tight break-all">
+                <CardTitle className="text-base leading-tight tracking-tight break-all">
                   {job.name}
                 </CardTitle>
                 {/* 활성화 토글 */}
@@ -181,13 +198,13 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
             </CardHeader>
             <CardContent className="flex flex-col gap-3 flex-1">
               {/* URL */}
-              <p className="text-xs text-muted-foreground break-all line-clamp-2">
+              <p className="line-clamp-2 break-all rounded-lg bg-muted/30 px-2.5 py-2 text-xs text-muted-foreground">
                 🔗 {job.url}
               </p>
 
               {/* 실행 주기 */}
               <div className="flex items-center gap-2 flex-wrap">
-                <Badge variant="secondary" className="font-mono text-xs">
+                <Badge variant="secondary" className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs">
                   {job.cron_expression}
                 </Badge>
                 <span className="text-xs text-muted-foreground">
@@ -206,17 +223,17 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
               {/* 상태 배지 */}
               <Badge
                 variant={job.is_active ? 'default' : 'outline'}
-                className="w-fit"
+                className="w-fit rounded-md"
               >
                 {job.is_active ? '활성' : '비활성'}
               </Badge>
 
               {/* 버튼 영역 */}
-              <div className="flex flex-wrap gap-2 mt-auto pt-2 border-t">
+              <div className="mt-auto flex flex-wrap gap-2 border-t border-border/60 pt-3">
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex-1 min-w-0 min-h-10"
+                  className="min-h-10 min-w-0 flex-1 rounded-xl"
                   onClick={() => handleEditClick(job)}
                   disabled={isPending}
                 >
@@ -224,7 +241,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
                 </Button>
                 <Button
                   size="sm"
-                  className="flex-1 min-w-0 min-h-10"
+                  className="min-h-10 min-w-0 flex-1 rounded-xl"
                   onClick={() => handleRunNow(job)}
                   disabled={isPending}
                 >
@@ -233,7 +250,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
                 <Button
                   size="sm"
                   variant="destructive"
-                  className="flex-1 min-w-0 min-h-10"
+                  className="min-h-10 min-w-0 flex-1 rounded-xl"
                   onClick={() => {
                     setDeleteTarget(job)
                     setDeleteOpen(true)

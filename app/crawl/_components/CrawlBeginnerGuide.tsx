@@ -19,7 +19,7 @@ const GUIDE_ITEMS: GuideItem[] = [
   {
     title: '2단계: 선택자(Selector) 복사하기',
     description:
-      '선택된 HTML 요소에서 우클릭 후 Copy > Copy selector를 눌러 선택자를 복사합니다. 같은 방식으로 제목, 본문, 날짜 등 필요한 항목을 각각 준비하세요.',
+      '원하는 텍스트(제목/본문/날짜)에서 우클릭 후 검사(Inspect)로 해당 태그를 정확히 찾고, Elements 패널에서 그 태그를 우클릭해 Copy > Copy selector를 누르세요. 복사한 선택자는 console에서 document.querySelector("선택자")?.innerText로 바로 검증할 수 있습니다. 값이 null이면 선택자가 틀렸거나 아직 렌더링 전일 수 있으니, id/class/data-* 기반의 더 안정적인 선택자로 다시 복사해 항목별로 정리하세요.',
     imageSrc: '/images/crawl-step-run.svg',
     imageAlt: '선택자를 복사하는 단계 이미지',
   },
@@ -34,31 +34,38 @@ const GUIDE_ITEMS: GuideItem[] = [
 
 export default function CrawlBeginnerGuide() {
   return (
-    <section className="mb-6 rounded-2xl border bg-muted/30 p-4 sm:p-5">
-      <details>
+    <section className="mb-8 rounded-3xl border border-border/60 bg-background/90 p-5 shadow-sm backdrop-blur sm:p-6">
+      <details className="group">
         <summary className="cursor-pointer list-none">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold">처음 쓰는 분을 위한 3분 가이드</h2>
-              <p className="text-sm text-muted-foreground mt-1">
+              <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
+                처음 쓰는 분을 위한 3분 가이드
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
                 크롤링이 처음이라면 눌러서 가이드를 펼쳐보세요.
               </p>
             </div>
-            <span className="text-xs text-muted-foreground shrink-0">펼치기 / 접기</span>
+            <span className="shrink-0 rounded-full border border-border/70 bg-muted/40 px-3 py-1 text-xs text-muted-foreground transition group-open:bg-muted">
+              펼치기 / 접기
+            </span>
           </div>
         </summary>
 
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
           {GUIDE_ITEMS.map((item) => (
-            <Card key={item.title} className="overflow-hidden">
-              <div className="relative w-full h-36 bg-background">
-                <Image src={item.imageSrc} alt={item.imageAlt} fill className="object-contain p-4" />
+            <Card
+              key={item.title}
+              className="overflow-hidden rounded-2xl border border-border/60 bg-background shadow-sm"
+            >
+              <div className="relative h-40 w-full bg-muted/30">
+                <Image src={item.imageSrc} alt={item.imageAlt} fill className="object-contain p-5" />
               </div>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">{item.title}</CardTitle>
+                <CardTitle className="text-base tracking-tight">{item.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
               </CardContent>
             </Card>
           ))}
