@@ -23,6 +23,26 @@ interface CrawlPageClientProps {
   jobs: CrawlJob[]
 }
 
+// 서버/클라이언트 환경 차이 없이 항상 같은 한국어 날짜 문자열을 만듭니다.
+function formatKoreanDateTime(value: string) {
+  const date = new Date(value)
+
+  // 잘못된 날짜가 들어오면 사용자에게는 원본 값을 보여줍니다.
+  if (Number.isNaN(date.getTime())) return value
+
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour24 = date.getHours()
+  const minute = String(date.getMinutes()).padStart(2, '0')
+  const second = String(date.getSeconds()).padStart(2, '0')
+
+  const period = hour24 < 12 ? '오전' : '오후'
+  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12
+
+  return `${year}. ${month}. ${day}. ${period} ${hour12}:${minute}:${second}`
+}
+
 export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
   // ── 추가 다이얼로그 상태 ──
   const [addOpen, setAddOpen] = useState(false)
@@ -167,7 +187,7 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
               <p className="text-xs text-muted-foreground">
                 마지막 실행:{' '}
                 {job.last_run_at
-                  ? new Date(job.last_run_at).toLocaleString('ko-KR')
+                  ? formatKoreanDateTime(job.last_run_at)
                   : '없음'}
               </p>
 
