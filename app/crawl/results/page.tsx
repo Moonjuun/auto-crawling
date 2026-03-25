@@ -17,6 +17,9 @@ import JobSelector from './_components/JobSelector'
 
 export const dynamic = 'force-dynamic'
 
+const IMAGE_FIELD_HINTS = ['image', 'img', 'thumbnail', 'thumb', 'photo', 'poster']
+const TITLE_FIELD_HINTS = ['title', 'name', 'subject', 'headline']
+
 // ─────────────────────────────────────────────
 // run_id 기준으로 결과를 그룹핑
 // ─────────────────────────────────────────────
@@ -62,10 +65,33 @@ function StatusBadge({ status }: { status: CrawlLog['status'] }) {
   return <Badge variant={variants[status]}>{labels[status]}</Badge>
 }
 
+// 문자열이 이미지 URL인지 확인합니다.
+function isImageUrl(value: string) {
+  const trimmed = value.trim().toLowerCase()
+  if (!trimmed) return false
+  if (trimmed.startsWith('data:image/')) return true
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) return false
+  return /\.(png|jpe?g|gif|webp|bmp|svg)(\?.*)?$/.test(trimmed)
+}
+
+// 컬럼 이름 기준으로 이미지 성격 컬럼인지 판단합니다.
+function isImageField(columnKey?: string) {
+  if (!columnKey) return false
+  const normalizedKey = columnKey.toLowerCase()
+  return IMAGE_FIELD_HINTS.some((hint) => normalizedKey.includes(hint))
+}
+
+// 컬럼 이름 기준으로 제목/타이틀 성격 컬럼인지 판단합니다.
+function isTitleField(columnKey?: string) {
+  if (!columnKey) return false
+  const normalizedKey = columnKey.toLowerCase()
+  return TITLE_FIELD_HINTS.some((hint) => normalizedKey.includes(hint))
+}
+
 // ─────────────────────────────────────────────
 // 셀 값 렌더링 (배열/객체/문자열 처리)
 // ─────────────────────────────────────────────
-function CellValue({ value }: { value: unknown }) {
+function CellValue({ value, columnKey }: { value: unknown; columnKey?: string }) {
   if (value === null || value === undefined) {
     return <span className="text-muted-foreground text-xs">-</span>
   }
@@ -116,7 +142,56 @@ function CellValue({ value }: { value: unknown }) {
       </pre>
     )
   }
-  return <span className="text-xs">{String(value)}</span>
+
+  const textValue = String(value)
+  const shouldRenderImage = isImageField(columnKey) || isImageUrl(textValue)
+  if (shouldRenderImage) {
+    return (
+      <div className="w-[140px] min-w-[120px] space-y-1.5">
+        <div className="overflow-hidden rounded-lg border bg-muted/30">
+          <img
+            src={textValue}
+            alt={`${columnKey ?? '이미지'} 미리보기`}
+            className="h-24 w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <a
+          href={textValue}
+          target="_blank"
+          rel="noreferrer"
+          className="block truncate text-[11px] text-muted-foreground underline-offset-2 hover:underline"
+          title={textValue}
+        >
+          원본 보기
+        </a>
+      </div>
+    )
+  }
+
+  if (isTitleField(columnKey)) {
+    return (
+      <p className="max-w-xs min-w-[180px] text-sm font-medium leading-relaxed wrap-break-word">
+        {textValue}
+      </p>
+    )
+  }
+
+  if (textValue.startsWith('http://') || textValue.startsWith('https://')) {
+    return (
+      <a
+        href={textValue}
+        target="_blank"
+        rel="noreferrer"
+        className="block max-w-xs truncate text-xs text-muted-foreground underline-offset-2 hover:underline"
+        title={textValue}
+      >
+        {textValue}
+      </a>
+    )
+  }
+
+  return <span className="text-xs wrap-break-word">{textValue}</span>
 }
 
 // ─────────────────────────────────────────────
@@ -142,26 +217,31 @@ export default async function ResultsPage({
   const groups = groupResultsByRun(results)
 
   return (
-    <main className="min-h-full">
+    <main className="min-h-full space-y-6">
       {/* ── 헤더 ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="rounded-3xl border border-border/60 bg-background/90 p-5 shadow-sm backdrop-blur sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">수집 결과</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+              Auto Crawling
+            </p>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">수집 결과</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
             {selectedJob
               ? `"${selectedJob.name}"의 수집 결과`
               : '작업을 선택하면 결과를 볼 수 있습니다.'}
           </p>
         </div>
         <Link href="/crawl">
-          <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="min-h-10 rounded-xl">
             ← 작업 관리로
           </Button>
         </Link>
+        </div>
       </div>
 
       {/* ── 작업 선택 드롭다운 ── */}
-      <div className="mb-6">
+      <div>
         <Suspense fallback={<div className="w-72 h-10 bg-muted animate-pulse rounded" />}>
           <JobSelector jobs={jobs} selectedJobId={job_id ?? ''} />
         </Suspense>
@@ -175,14 +255,14 @@ export default async function ResultsPage({
 
       {job_id && (
         <Tabs defaultValue="results">
-          <TabsList className="mb-4">
-            <TabsTrigger value="results">
+          <TabsList className="mb-4 h-auto w-full justify-start gap-1 rounded-xl p-1 sm:w-auto">
+            <TabsTrigger value="results" className="min-h-10 flex-1 sm:flex-none">
               수집 결과{' '}
               <Badge variant="secondary" className="ml-1">
                 {results.length}
               </Badge>
             </TabsTrigger>
-            <TabsTrigger value="logs">
+            <TabsTrigger value="logs" className="min-h-10 flex-1 sm:flex-none">
               실행 로그{' '}
               <Badge variant="secondary" className="ml-1">
                 {logs.length}
@@ -233,7 +313,7 @@ export default async function ResultsPage({
                             <TableRow key={item.id}>
                               {group.columns.map((col) => (
                                 <TableCell key={col} className="align-top py-2">
-                                  <CellValue value={item.data[col]} />
+                                  <CellValue value={item.data[col]} columnKey={col} />
                                 </TableCell>
                               ))}
                             </TableRow>

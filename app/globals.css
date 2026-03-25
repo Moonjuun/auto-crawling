@@ -31,53 +31,55 @@
 
 /* 라이트 모드 */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Toss/Apple 톤: 밝은 중립 배경 + 낮은 채도 블루 포인트 */
+  --background: oklch(0.985 0.003 255);
+  --foreground: oklch(0.26 0.02 256);
+  --card: oklch(1 0.002 255);
+  --card-foreground: oklch(0.26 0.02 256);
+  --popover: oklch(0.998 0.002 255);
+  --popover-foreground: oklch(0.26 0.02 256);
+  --primary: oklch(0.59 0.165 256);
+  --primary-foreground: oklch(0.99 0.003 255);
+  --secondary: oklch(0.955 0.008 252);
+  --secondary-foreground: oklch(0.35 0.025 256);
+  --muted: oklch(0.965 0.006 255);
+  --muted-foreground: oklch(0.53 0.015 256);
+  --accent: oklch(0.95 0.015 250);
+  --accent-foreground: oklch(0.35 0.025 256);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --radius: 0.625rem;
+  --destructive-foreground: oklch(0.99 0.003 255);
+  --border: oklch(0.905 0.01 255);
+  --input: oklch(0.92 0.01 255);
+  --ring: oklch(0.62 0.145 256);
+  --radius: 0.875rem;
 }
 
 /* 다크 모드 */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: oklch(0.2 0.015 257);
+  --foreground: oklch(0.94 0.005 255);
+  --card: oklch(0.25 0.016 257);
+  --card-foreground: oklch(0.94 0.005 255);
+  --popover: oklch(0.24 0.016 257);
+  --popover-foreground: oklch(0.94 0.005 255);
+  --primary: oklch(0.72 0.13 256);
+  --primary-foreground: oklch(0.2 0.015 257);
+  --secondary: oklch(0.3 0.015 257);
+  --secondary-foreground: oklch(0.9 0.005 255);
+  --muted: oklch(0.29 0.015 257);
+  --muted-foreground: oklch(0.73 0.01 255);
+  --accent: oklch(0.33 0.02 256);
+  --accent-foreground: oklch(0.93 0.005 255);
+  --destructive: oklch(0.69 0.17 24);
+  --destructive-foreground: oklch(0.98 0.003 255);
+  --border: oklch(0.37 0.01 257);
+  --input: oklch(0.39 0.01 257);
+  --ring: oklch(0.7 0.115 256);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+    'Noto Sans KR', sans-serif;
 }

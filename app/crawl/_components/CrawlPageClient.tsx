@@ -18,7 +18,6 @@ import { cronToKorean } from '@/lib/cron-utils'
 import type { CrawlJob, CrawlSelector } from '@/types/crawl'
 import JobDialog from './JobDialog'
 import CrawlBeginnerGuide from './CrawlBeginnerGuide'
-import Link from 'next/link'
 
 interface CrawlPageClientProps {
   jobs: CrawlJob[]
@@ -141,15 +140,6 @@ export default function CrawlPageClient({ jobs }: CrawlPageClientProps) {
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Link href="/crawl/results" className="w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-10 w-full rounded-xl border-border/70 bg-background px-4 sm:w-auto"
-              >
-                수집 결과 보기
-              </Button>
-            </Link>
             <Button onClick={() => setAddOpen(true)} className="min-h-10 rounded-xl px-4">
               + 새 작업 추가
             </Button>

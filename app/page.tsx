@@ -53,16 +53,6 @@ export default async function Home() {
             작업 상태, 최근 실행 결과, 실패 여부를 한 화면에서 확인합니다.
           </p>
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Link href="/crawl" className="w-full sm:w-auto">
-            <Button className="w-full">작업 관리 열기</Button>
-          </Link>
-          <Link href="/crawl/results" className="w-full sm:w-auto">
-            <Button variant="outline" className="w-full">
-              결과 상세 보기
-            </Button>
-          </Link>
-        </div>
       </section>
 
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
