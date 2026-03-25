@@ -6,7 +6,11 @@
     "dev": "NODE_OPTIONS='--max-http-header-size=65536' next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test e2e",
+    "test": "yarn test:unit && yarn test:integration && yarn test:e2e"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.15",
@@ -30,6 +34,7 @@
     "tailwind-merge": "3.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -37,6 +42,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.1"
   }
 }
