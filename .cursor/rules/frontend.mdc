@@ -1,0 +1,30 @@
+---
+description: Next.js 프론트엔드 UI/UX 구현 규칙
+globs: "{app/**/*.ts,app/**/*.tsx,components/**/*.tsx}"
+alwaysApply: false
+---
+
+# 프론트엔드 규칙
+
+## 컴포넌트 원칙
+- 기본적으로 서버 컴포넌트로 작성합니다.
+- `useState`, `useEffect`, `onClick` 등 클라이언트 기능이 필요할 때만 파일 최상단에 `'use client'`를 추가합니다.
+
+## 디자인 시스템
+- 새로운 CSS 파일과 `<style>` 태그 사용을 금지합니다.
+- Tailwind CSS 클래스와 Shadcn UI 컴포넌트만 사용합니다.
+- 색상, 간격은 Shadcn 토큰(`primary`, `secondary`, `muted`)을 우선 사용합니다.
+
+## 반응형 (Mobile First)
+- 모바일을 기본으로 작성하고 `md:` -> `lg:` 순으로 확장합니다.
+- 모바일에서는 `flex-col`, 큰 화면에서는 `flex-row`를 기본 전략으로 사용합니다.
+- 테이블, 긴 텍스트는 `overflow-x-auto` 또는 `truncate` 처리로 오버플로우를 방지합니다.
+- 버튼과 입력창은 모바일 터치 영역을 충분히 확보합니다.
+
+## 에러 처리
+- 에러를 콘솔에만 남기지 않습니다.
+- `toast.error("...")` 또는 사용자 알림 UI로 반드시 노출합니다.
+
+## 상태별 UI
+- 주요 페이지와 핵심 섹션에는 로딩, 에러, 빈 상태(Empty State) UI를 제공합니다.
+- App Router에서는 가능하면 `loading.tsx`, `error.tsx`를 활용해 사용자 대기/오류 경험을 개선합니다.

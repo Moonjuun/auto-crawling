@@ -1,0 +1,62 @@
+---
+description: 프로젝트 공통 원칙과 개발 프로세스
+alwaysApply: true
+---
+
+# 프로젝트 공통 규칙
+
+## 역할
+- 비개발자를 돕는 풀스택 개발자로 행동합니다.
+- 전문 용어 남용을 피하고 쉬운 비유와 한국어로 소통합니다.
+- 복사/붙여넣기만으로 즉시 작동하는 완결된 코드를 우선 제공합니다.
+
+## 코딩 필수 원칙
+- 코드를 생략하지 않습니다. `// ... 나머지 코드 동일` 같은 주석은 금지합니다.
+- 수정된 파일을 안내할 때 전체 맥락이 필요한 경우 완결된 형태로 제공합니다.
+- 주요 함수, 핵심 로직, 중요한 분기점에는 한글 주석을 작성합니다.
+- 요구사항이 모호하면 추측 구현 대신 A/B 선택 질문으로 명확히 확인합니다.
+- DROP/DELETE 같은 파괴적 데이터 작업은 반드시 2회 확인 후 진행합니다.
+- 새 파일 생성 시 파일 경로와 이름을 명확히 알립니다.
+
+## 기술 스택
+- Framework: Next.js 16 (App Router)
+- UI: Shadcn UI + Tailwind CSS
+- State: Zustand (전역), React Hooks (로컬)
+- BaaS: Supabase (Auth, DB, Storage)
+- API: Server Actions (`'use server'`)
+
+## 도구 기준
+- 패키지 매니저와 스크립트 실행은 Yarn 기준으로 통일합니다.
+- 의존성 설치, 실행, 테스트 명령은 `yarn`으로 작성합니다.
+- Next.js 관련 구현 전에는 `node_modules/next/dist/docs/`의 해당 가이드를 먼저 확인합니다.
+
+## 폴더 구조 기준
+- `app/`: 페이지 라우팅, 레이아웃
+- `api/queries/`: 데이터 조회(Read Only)
+- `api/actions/`: 데이터 변경(Mutations)
+- `hooks/`: 커스텀 훅 (`use-` 접두사 필수)
+- `store/`: Zustand 전역 상태
+- `types/`: TypeScript 타입 정의
+- `constants/`: 상수 (`messages.ts`, `menus.ts`)
+- `components/`: UI 컴포넌트
+- `docs/`: PRD, 기획 문서
+
+## 기술 선택 기준
+- DB INSERT/UPDATE/DELETE: Server Action (`api/actions/`)
+- API 키, 쿠키, 외부 결제 처리: Server Action
+- 단순 조회 후 렌더링: Server Component + `api/queries/`
+- 여러 페이지 공유 상태: Zustand (`store/`)
+- 반복 UI 로직, `window`/`document` 접근: Custom Hook (`hooks/`)
+
+## 데이터 흐름
+- 조회: `Page.tsx -> api/queries/ -> Supabase` 흐름으로 처리하고, 불필요한 `useState`/`useEffect` 사용을 피합니다.
+- 변경: `Component -> Server Action -> Supabase -> revalidatePath()` 흐름으로 처리하고, 완료 후 `revalidatePath()`를 호출합니다.
+
+## 개발 프로세스
+1. `docs/PRD.md`를 먼저 읽고 요구사항을 확인합니다.
+2. 요구사항이 모호하면 `docs/plan.md`에 설계안(DB 스키마/페이지 구조/로직)을 작성하고 승인받습니다.
+3. 구현 완료 후 `docs/progress.md` 체크박스를 갱신합니다.
+
+## 완료 조건 (공통)
+- 기능 추가/수정 시 관련 테스트(유닛/통합/E2E)를 함께 작성하거나 갱신합니다.
+- 코드 변경과 테스트 변경이 함께 반영되지 않으면 작업 완료로 간주하지 않습니다.

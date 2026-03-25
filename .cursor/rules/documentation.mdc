@@ -1,0 +1,26 @@
+---
+description: 문서, 환경변수, 기획 변경 기록 규칙
+globs: "{docs/**/*.md,README.md,.env.example}"
+alwaysApply: false
+---
+
+# 문서화 규칙
+
+## README.md 업데이트
+새로운 주요 기능 추가 시 `README.md`에 반드시 기록합니다.
+- 기능: `- [x] 기능명 (YYYY.MM.DD)`
+- 새 페이지: `페이지명: /경로`
+
+## 환경변수 관리
+- `.env.example`에는 변수명만 남기고 실제 값은 비웁니다.
+- 발급처 주석을 반드시 작성합니다.
+  - 예: `# Supabase 대시보드 > Project Settings > API에서 복사`
+
+## 비즈니스 로직 기록
+코드만으로 이해하기 어려운 정책, 권한 결정은 `docs/logic.md`에 기록합니다.
+
+## 트러블슈팅
+자주 발생하는 에러와 해결 방법은 `docs/troubleshooting.md`에 기록합니다.
+
+## 기획 변경 시
+코드 수정 전에 `docs/PRD.md`를 먼저 갱신합니다.

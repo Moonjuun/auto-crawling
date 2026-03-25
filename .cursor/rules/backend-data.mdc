@@ -1,0 +1,29 @@
+---
+description: 백엔드와 DB 작업 규칙 (Supabase/Server Actions)
+globs: "{api/**/*.ts,app/**/actions.ts,app/**/_actions/**}"
+alwaysApply: false
+---
+
+# 백엔드·데이터베이스 규칙
+
+## DB 작업 전 필수
+- DB 관련 코드를 작성하기 전에 현재 테이블 구조를 먼저 조회합니다.
+- 테이블 이름, 컬럼 이름을 추측해서 작성하지 않습니다.
+- Supabase MCP가 연결되어 있으면 MCP 도구로 스키마를 조회합니다.
+- MCP가 없으면 사용자에게 정확한 스키마를 요청합니다.
+
+## Server Actions
+- 데이터 저장/수정/삭제는 `pages/api` 또는 `route.ts` 대신 Server Action으로 구현합니다.
+- 파일 최상단에 `'use server'`를 명시합니다.
+- `try/catch` 기반 에러 처리를 필수로 적용합니다.
+- 입력값은 스키마 기반(예: `zod`)으로 검증하고, 유효하지 않으면 즉시 실패 처리합니다.
+- 반환값은 `{ success, message, data }` 형태를 기본으로 통일합니다.
+
+## 보안
+- 새 테이블에는 RLS(Row Level Security) 정책을 활성화합니다.
+- SQL 작성 시 접근 정책(공개 조회, 로그인 사용자 수정 등)을 함께 정의합니다.
+- 사용자 세션은 `@supabase/ssr` 기반으로 관리합니다.
+
+## 타입 안전성
+- Supabase 생성 타입을 우선 활용해 TypeScript 타입을 정의합니다.
+- `any` 타입 사용을 금지합니다.
